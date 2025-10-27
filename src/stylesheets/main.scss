@@ -1,0 +1,39 @@
+@use 'sass:color';
+
+// 変数定義
+$primary-color: cadetblue;
+$font-size: 16px;
+$background-color: #f5f5f5;
+
+// ミックスイン
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// スタイル
+body {
+  color: $primary-color;
+  font-size: $font-size;
+  margin: 0;
+  padding: 0;
+  background-color: $background-color;
+}
+
+.container {
+  @include center;
+  height: 100vh;
+
+  h1 {
+    color: color.adjust($primary-color, $lightness: -20%);
+    font-size: $font-size * 2;
+  }
+}
+#RED {
+  color: red;
+  font-size: 24px;
+  font-weight: 1000;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
