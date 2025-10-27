@@ -91,6 +91,19 @@ module.exports = {
         test: /\.(glsl|vs|fs)$/,
         use: 'raw-loader',
       },
+      {
+        test: /\.(glb|gltf)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: '3dmodels/',
+              publicPath: '3dmodels/',
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -100,9 +113,15 @@ module.exports = {
   }),
   new HtmlWebpackPlugin({
     template: './src/templates/index.pug',
+    filename: 'index.html',
+  }),
+  new HtmlWebpackPlugin({
+    template: './src/templates/another-page.pug',
+    filename: 'another-page.html',
   }),
   new CleanWebpackPlugin(),
 ],
 };
+
 
 
