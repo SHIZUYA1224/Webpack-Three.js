@@ -1,0 +1,54 @@
+/*!****************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/stylesheets/main.scss ***!
+  \****************************************************************************************************************************************************************************/
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: yellow;
+  padding: 1rem;
+}
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+}
+header nav ul li a {
+  text-decoration: none;
+  color: #333;
+}
+header nav ul li a:hover {
+  color: #007bff;
+}
+
+body {
+  color: cadetblue;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container h1 {
+  color: rgb(57, 94.8, 96);
+  font-size: 32px;
+}
+
+#RED {
+  color: red;
+  font-size: 24px;
+  font-weight: 1000;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
