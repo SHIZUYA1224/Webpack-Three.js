@@ -110848,22 +110848,73 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   materialConfig: () => (/* binding */ materialConfig),
 /* harmony export */   objectConfig: () => (/* binding */ objectConfig)
 /* harmony export */ });
+// ===== config.js マニュアル =====
+// このファイルはThree.jsプロジェクトの設定を管理します。
+// マテリアルやオブジェクトの共通設定をここに定義し、他のファイルからインポートして使用します。
+// これにより、設定の一元管理が可能になり、変更が容易になります。
+
+// ===== materialConfig =====
+// マテリアルの設定オブジェクト。
+// Three.jsのMeshBasicMaterialやMeshStandardMaterialに適用するプロパティを定義。
+// 例: color, opacity, transparent など。
 const materialConfig = {
   green: {
     color: 0x00ff00
   },
+  // 緑色 (16進数)
   red: {
     color: 0xff0000
   },
+  // 赤色
   blue: {
     color: 0x0000ff
-  }
+  } // 青色
 };
+
+// 使用例 (materials.jsで):
+// import { materialConfig } from './config.js';
+// export const redMaterial = new THREE.MeshBasicMaterial(materialConfig.red);
+
+// 追加方法:
+// 新しいマテリアルを追加する場合:
+// materialConfig.yellow = { color: 0xffff00, transparent: true, opacity: 0.5 };
+// 他のファイルで使用可能。
+
+// ===== objectConfig =====
+// オブジェクトの設定オブジェクト。
+// ジオメトリのサイズや形状を定義。
+// 例: size, width, height, radius など。
 const objectConfig = {
-  cube: {
+  torus: {
     size: 1
-  }
+  } // キューブのサイズ (BoxGeometryの引数)
 };
+
+// 使用例 (sceneAssets.jsで):
+// import { objectConfig } from './config.js';
+// const cubeGeometry = new THREE.BoxGeometry(objectConfig.cube.size, objectConfig.cube.size, objectConfig.cube.size);
+
+// 追加方法:
+// 新しいオブジェクト設定を追加する場合:
+// objectConfig.sphere = { radius: 1, widthSegments: 32, heightSegments: 32 };
+// 他のファイルで使用可能。
+
+// ===== 注意点 =====
+// - 色は16進数 (0xRRGGBB) で指定。
+// - 設定を変更すると、インポートした全てのファイルに反映されます。
+// - 複雑な設定は別ファイルに分けることを検討。
+// - デバッグ時はconsole.logで確認: console.log(materialConfig.red);
+
+// ===== 拡張例 =====
+// 高度な設定を追加する場合:
+// export const lightConfig = {
+//   ambient: { color: 0xffffff, intensity: 0.5 },
+//   directional: { color: 0xffffff, intensity: 1.0, position: [10, 10, 5] },
+// };
+
+// 使用例:
+// import { lightConfig } from './config.js';
+// const ambientLight = new THREE.AmbientLight(lightConfig.ambient.color, lightConfig.ambient.intensity);
 
 /***/ }),
 
@@ -110893,6 +110944,36 @@ const blueMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial(_c
 // デフォルトのGreenマテリアル
 const greenMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial(_config_js__WEBPACK_IMPORTED_MODULE_1__.materialConfig.green);
 
+// ===== Blenderテクスチャマップの適用例（コメントアウト） =====
+// Blenderで出力したテクスチャマップをMeshStandardMaterialに適用する場合:
+// const textureLoader = new THREE.TextureLoader();
+
+// // テクスチャのロード（portfolio-webpack/src/images/texture/ に配置予定）
+// const baseColorTexture = textureLoader.load('images/texture/base_color.jpg');  // Base Color (Diffuse)
+// const normalTexture = textureLoader.load('images/texture/normal.jpg');          // Normal
+// const roughnessTexture = textureLoader.load('images/texture/roughness.jpg');    // Roughness
+// const metallicTexture = textureLoader.load('images/texture/metallic.jpg');      // Metallic
+// const aoTexture = textureLoader.load('images/texture/ao.jpg');                  // Ambient Occlusion
+// const emissiveTexture = textureLoader.load('images/texture/emissive.jpg');      // Emission
+// const alphaTexture = textureLoader.load('images/texture/alpha.jpg');            // Alpha (Transparency)
+
+// // MeshStandardMaterialに適用
+// export const texturedMaterial = new THREE.MeshStandardMaterial({
+//   map: baseColorTexture,           // ベースカラー
+//   normalMap: normalTexture,        // 法線マップ
+//   roughnessMap: roughnessTexture,  // 粗さマップ
+//   metalnessMap: metallicTexture,   // 金属マップ
+//   aoMap: aoTexture,                // AOマップ
+//   emissiveMap: emissiveTexture,    // 発光マップ
+//   alphaMap: alphaTexture,          // 透明マップ
+//   transparent: true,               // 透明マップ使用時はtrue
+// });
+
+// // 追加設定（必要に応じて）
+// texturedMaterial.normalMap.encoding = THREE.LinearEncoding;  // 法線マップのエンコーディング
+// texturedMaterial.aoMapIntensity = 1.0;  // AO強度
+// texturedMaterial.emissiveIntensity = 1.0;  // 発光強度
+
 /***/ }),
 
 /***/ "./src/javascripts/three/sceneAssets.js":
@@ -110903,11 +110984,12 @@ const greenMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.MeshBasicMaterial(_
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   cube: () => (/* binding */ cube)
+/* harmony export */   torus: () => (/* binding */ torus)
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.core.js");
 /* harmony import */ var _materials_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./materials.js */ "./src/javascripts/three/materials.js");
 
+ // GLTFLoaderをインポート
  // マテリアルをインポート
 
 // ===== マテリアル定義 =====
@@ -110923,14 +111005,47 @@ __webpack_require__.r(__webpack_exports__);
 
 // ===== オブジェクト定義 =====
 // 基本オブジェクト
-const cubeGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.BoxGeometry();
-const cube = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(cubeGeometry, _materials_js__WEBPACK_IMPORTED_MODULE_1__.greenMaterial);
+const torusGeometry = new three__WEBPACK_IMPORTED_MODULE_0__.TorusGeometry(1, 0.4, 16, 100);
+const torus = new three__WEBPACK_IMPORTED_MODULE_0__.Mesh(torusGeometry, _materials_js__WEBPACK_IMPORTED_MODULE_1__.greenMaterial);
 
 // 高度なオブジェクト（雛形: コメントアウトで後で解除）
 // const advancedGeometry = new THREE.SphereGeometry(1, 32, 32);
 // export const advancedObject = new THREE.Mesh(advancedGeometry, normalMapMaterial);
 // advancedObject.position.set(2, 0, 0);  // 位置設定
 // advancedObject.castShadow = true;  // 影の設定
+
+// ===== GLTFモデルの追加方法（コメントアウト） =====
+// GLTFファイルを読み込んでシーンに追加する場合:
+// const gltfLoader = new GLTFLoader();
+// gltfLoader.load(
+//   'path/to/your-model.gltf',  // GLTFファイルのパス
+//   (gltf) => {
+//     const model = gltf.scene;
+//     model.position.set(0, 0, 0);  // 位置設定
+//     model.scale.set(1, 1, 1);     // スケール設定
+//     scene.add(model);             // シーンに追加（threeScene.jsで実行）
+//   },
+//   (progress) => {
+//     console.log('Loading progress:', progress);
+//   },
+//   (error) => {
+//     console.error('Error loading GLTF:', error);
+//   }
+// );
+
+// OBJファイルの場合（OBJLoaderが必要）:
+// import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+// const objLoader = new OBJLoader();
+// objLoader.load('path/to/model.obj', (object) => {
+//   scene.add(object);
+// });
+
+// FBXファイルの場合（FBXLoaderが必要）:
+// import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+// const fbxLoader = new FBXLoader();
+// fbxLoader.load('path/to/model.fbx', (object) => {
+//   scene.add(object);
+// });
 
 /***/ }),
 
@@ -110978,18 +111093,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shaders_fragment_glsl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./shaders/fragment.glsl */ "./src/javascripts/three/shaders/fragment.glsl");
 
 
-
+ // インポート
 
 
  // パスを調整
  // パスを調整
+
+// ===== メインオブジェクトの設定 =====
+// ここでオブジェクトを変更（torus, cube, etc.）
+const mainObject = _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.torus; // 変更: ここだけ変えればOK
 
 // シーン、カメラ、レンダラーの作成
 const scene = new three__WEBPACK_IMPORTED_MODULE_0__.Scene();
 const camera = new three__WEBPACK_IMPORTED_MODULE_0__.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new three__WEBPACK_IMPORTED_MODULE_1__.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById('app').appendChild(renderer.domElement);
+document.getElementById('canvas').appendChild(renderer.domElement);
 
 // GLSLシェーダーマテリアルを作成（オプションで使用）
 const shaderMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.ShaderMaterial({
@@ -110998,16 +111117,25 @@ const shaderMaterial = new three__WEBPACK_IMPORTED_MODULE_0__.ShaderMaterial({
 });
 
 // シーンにオブジェクトを追加
-scene.add(_sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube);
+scene.add(mainObject);
 
 // カメラの位置設定
 camera.position.z = 5;
 
-// GUIの初期化
-const gui = new dat_gui__WEBPACK_IMPORTED_MODULE_4__.GUI();
+// GUIの初期化（位置変更）
+const gui = new dat_gui__WEBPACK_IMPORTED_MODULE_4__.GUI({
+  autoPlace: false
+});
+document.body.appendChild(gui.domElement); // DOMに追加
+gui.domElement.style.position = 'absolute';
+gui.domElement.style.top = '10px'; // 上から10px
+gui.domElement.style.left = '50%'; // 左から50%（中央）
+gui.domElement.style.transform = 'translateX(-50%)'; // 中央にシフト
+gui.domElement.style.zIndex = '1001'; // ヘッダーより上
+
 const materialFolder = gui.addFolder('Materials');
-materialFolder.add(_sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.material, 'wireframe').name('Wireframe');
-materialFolder.addColor(_sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.material, 'color').name('Color');
+materialFolder.add(mainObject.material, 'wireframe').name('Wireframe');
+materialFolder.addColor(mainObject.material, 'color').name('Color');
 materialFolder.open();
 
 // GUIでシェーダーマテリアルに切り替えられるように追加
@@ -111015,7 +111143,7 @@ const controls = {
   useShader: false
 };
 materialFolder.add(controls, 'useShader').name('Use Shader').onChange(value => {
-  _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.material = value ? shaderMaterial : _materials_js__WEBPACK_IMPORTED_MODULE_3__.redMaterial; // 例: シェーダー or 通常マテリアル
+  mainObject.material = value ? shaderMaterial : _materials_js__WEBPACK_IMPORTED_MODULE_3__.redMaterial;
 });
 
 // Raycasterとマウスベクトルの初期化
@@ -111033,12 +111161,12 @@ function onMouseMove(event) {
 
   // シーン内のオブジェクトとの交差をチェック
   const intersects = raycaster.intersectObjects(scene.children);
-  if (intersects.length > 0 && intersects[0].object === _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube) {
-    // カーソルがキューブ上にある場合、サイズを大きく
-    _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.scale.set(1.2, 1.2, 1.2);
+  if (intersects.length > 0 && intersects[0].object === mainObject) {
+    // カーソルがオブジェクト上にある場合、サイズを大きく
+    mainObject.scale.set(1.2, 1.2, 1.2);
   } else {
     // そうでない場合、元のサイズに戻す
-    _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.scale.set(1, 1, 1);
+    mainObject.scale.set(1, 1, 1);
   }
 }
 
@@ -111055,12 +111183,12 @@ function onMouseClick(event) {
   const intersects = raycaster.intersectObjects(scene.children);
   if (intersects.length > 0) {
     const clickedObject = intersects[0].object;
-    if (clickedObject === _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube) {
-      // キューブがクリックされたらマテリアルを切り替え（Red ↔ Blue）
-      if (_sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.material === _materials_js__WEBPACK_IMPORTED_MODULE_3__.redMaterial) {
-        _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.material = _materials_js__WEBPACK_IMPORTED_MODULE_3__.blueMaterial;
+    if (clickedObject === mainObject) {
+      // オブジェクトがクリックされたらマテリアルを切り替え（Red ↔ Blue）
+      if (mainObject.material === _materials_js__WEBPACK_IMPORTED_MODULE_3__.redMaterial) {
+        mainObject.material = _materials_js__WEBPACK_IMPORTED_MODULE_3__.blueMaterial;
       } else {
-        _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.material = _materials_js__WEBPACK_IMPORTED_MODULE_3__.redMaterial;
+        mainObject.material = _materials_js__WEBPACK_IMPORTED_MODULE_3__.redMaterial;
       }
       // ページ遷移はコメントアウト（必要に応じて有効化）
       // window.location.href = '/another-page.html';
@@ -111075,8 +111203,8 @@ window.addEventListener('click', onMouseClick);
 // アニメーションループ
 function animate() {
   requestAnimationFrame(animate);
-  _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.rotation.x += 0.01;
-  _sceneAssets_js__WEBPACK_IMPORTED_MODULE_2__.cube.rotation.y += 0.01;
+  mainObject.rotation.x += 0.01;
+  mainObject.rotation.y += 0.01;
   renderer.render(scene, camera);
 }
 animate();
@@ -111195,6 +111323,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // パスを調整
+
+// ヘッダーの表示/非表示
+let lastScrollTop = 0;
+const header = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  if (scrollTop > lastScrollTop) {
+    // 下スクロール: 隠す
+    header.style.transform = 'translateY(-100%)';
+  } else {
+    // 上スクロール: 表示
+    header.style.transform = 'translateY(0)';
+  }
+  lastScrollTop = scrollTop;
+});
 })();
 
 /******/ })()
