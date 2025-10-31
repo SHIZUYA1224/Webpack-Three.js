@@ -119048,6 +119048,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 async function initThreeApp() {
   let container = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : document.getElementById('canvas');
   if (!container) throw new Error('Container element #canvas not found');
@@ -119068,8 +119069,13 @@ async function initThreeApp() {
   scene.add(directionalLight);
 
   // Load assets
-  const [uwagiGltf, testGltf, baseTex] = await Promise.all([(0,_loaders_assets_js__WEBPACK_IMPORTED_MODULE_6__.loadGLTF)(_3dmodels_uwagi_glb__WEBPACK_IMPORTED_MODULE_11__), (0,_loaders_assets_js__WEBPACK_IMPORTED_MODULE_6__.loadGLTF)(_3dmodels_Test_object_glb__WEBPACK_IMPORTED_MODULE_12__), (0,_loaders_assets_js__WEBPACK_IMPORTED_MODULE_6__.loadTexture)(_images_texture_Test_texture_png__WEBPACK_IMPORTED_MODULE_13__, {
+  const [uwagiGltf, testGltf, baseTex, aoTex] = await Promise.all([(0,_loaders_assets_js__WEBPACK_IMPORTED_MODULE_6__.loadGLTF)(_3dmodels_uwagi_glb__WEBPACK_IMPORTED_MODULE_11__), (0,_loaders_assets_js__WEBPACK_IMPORTED_MODULE_6__.loadGLTF)(_3dmodels_Test_object_glb__WEBPACK_IMPORTED_MODULE_12__), (0,_loaders_assets_js__WEBPACK_IMPORTED_MODULE_6__.loadTexture)(_images_texture_Test_texture_png__WEBPACK_IMPORTED_MODULE_13__, {
     colorSpace: three__WEBPACK_IMPORTED_MODULE_0__.SRGBColorSpace,
+    flipY: false,
+    minFilter: three__WEBPACK_IMPORTED_MODULE_0__.LinearMipmapLinearFilter,
+    magFilter: three__WEBPACK_IMPORTED_MODULE_0__.LinearFilter
+  }), (0,_loaders_assets_js__WEBPACK_IMPORTED_MODULE_6__.loadTexture)(_images_texture_Test_texture_png__WEBPACK_IMPORTED_MODULE_13__, {
+    // AO is non-color data; keep Linear
     flipY: false,
     minFilter: three__WEBPACK_IMPORTED_MODULE_0__.LinearMipmapLinearFilter,
     magFilter: three__WEBPACK_IMPORTED_MODULE_0__.LinearFilter
@@ -119077,11 +119083,23 @@ async function initThreeApp() {
 
   // uwagi model
   const uwagiModel = uwagiGltf.scene;
-  uwagiModel.position.set(0, -1, 0);
+  uwagiModel.position.set(0, 2, 0);
   uwagiModel.scale.set(0.5, 0.5, 0.5);
   uwagiModel.traverse(child => {
     if (child.isMesh) {
-      child.material.side = three__WEBPACK_IMPORTED_MODULE_0__.DoubleSide;
+      // Ensure uv2 exists when using aoMap
+      (0,_materials_factories_js__WEBPACK_IMPORTED_MODULE_7__.ensureUv2)(child.geometry);
+      const mat = (0,_materials_factories_js__WEBPACK_IMPORTED_MODULE_7__.createStandardMaterial)({
+        baseMap: baseTex,
+        // 画像のベースカラー
+        aoMap: aoTex,
+        // AOマップ併用
+        aoMapIntensity: 1.0,
+        roughness: 1,
+        metalness: 0,
+        side: three__WEBPACK_IMPORTED_MODULE_0__.DoubleSide
+      });
+      child.material = mat;
     }
   });
   scene.add(uwagiModel);
@@ -119092,9 +119110,15 @@ async function initThreeApp() {
   testObject.scale.set(0.5, 0.5, 0.5);
   testObject.traverse(child => {
     if (child.isMesh) {
+      // Ensure uv2 exists when using aoMap
+      (0,_materials_factories_js__WEBPACK_IMPORTED_MODULE_7__.ensureUv2)(child.geometry);
       const mat = (0,_materials_factories_js__WEBPACK_IMPORTED_MODULE_7__.createStandardMaterial)({
-        map: baseTex,
-        color: 0xffffff,
+        //baseMap: baseTex,            // 画像のベースカラー
+        baseColor: 0xffaa00,
+        // 画像を使わない場合はカラーコードも可
+        aoMap: aoTex,
+        // AOマップ併用
+        aoMapIntensity: 1.0,
         roughness: 1,
         metalness: 0,
         side: three__WEBPACK_IMPORTED_MODULE_0__.DoubleSide
@@ -119339,6 +119363,7 @@ function loadGLTF(url) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   applyStandardMaterialToMesh: () => (/* binding */ applyStandardMaterialToMesh),
 /* harmony export */   createStandardMaterial: () => (/* binding */ createStandardMaterial),
 /* harmony export */   ensureUv2: () => (/* binding */ ensureUv2)
 /* harmony export */ });
@@ -119353,34 +119378,56 @@ function ensureUv2(geometry) {
     geometry.setAttribute('uv2', uv);
   }
 }
+
+// Flexible factory: accepts either baseMap (image) or baseColor (hex)
 function createStandardMaterial() {
+  var _ref;
   let {
+    // base color input (choose one). If baseMap is provided, baseColor is ignored (assumed white)
+    baseMap,
+    baseColor,
+    // backward-compat aliases
     map,
+    color,
+    // AO
     aoMap,
     aoMapIntensity = 1,
-    color = 0xffffff,
+    // PBR / rendering
     side = three__WEBPACK_IMPORTED_MODULE_0__.DoubleSide,
     metalness = 0,
     roughness = 1
   } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  const resolvedMap = baseMap !== null && baseMap !== void 0 ? baseMap : map;
+  const resolvedColor = (_ref = baseColor !== null && baseColor !== void 0 ? baseColor : color) !== null && _ref !== void 0 ? _ref : 0xffffff;
+
+  // If map provided, neutralize color to white to avoid tinting
   const mat = new three__WEBPACK_IMPORTED_MODULE_0__.MeshStandardMaterial({
-    color,
+    color: resolvedMap ? 0xffffff : resolvedColor,
     side,
     metalness,
     roughness
   });
-  if (map) {
-    mat.map = map;
+  if (resolvedMap) {
+    mat.map = resolvedMap;
     // baseColor map is color data
-    if (map.flipY === undefined) map.flipY = false;
-    if (map.colorSpace === undefined) map.colorSpace = three__WEBPACK_IMPORTED_MODULE_0__.SRGBColorSpace;
+    if (resolvedMap.flipY === undefined) resolvedMap.flipY = false;
+    if (resolvedMap.colorSpace === undefined) resolvedMap.colorSpace = three__WEBPACK_IMPORTED_MODULE_0__.SRGBColorSpace;
   }
   if (aoMap) {
-    mat.aoMap = aoMap; // non-color data; default Linear
+    mat.aoMap = aoMap; // non-color data; keep Linear
     mat.aoMapIntensity = aoMapIntensity;
+    if (aoMap.flipY === undefined) aoMap.flipY = false;
   }
   mat.needsUpdate = true;
   return mat;
+}
+
+// Helper to apply and ensure uv2 when aoMap is used
+function applyStandardMaterialToMesh(mesh) {
+  let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  if (options.aoMap) ensureUv2(mesh.geometry);
+  mesh.material = createStandardMaterial(options);
+  return mesh.material;
 }
 
 /***/ }),

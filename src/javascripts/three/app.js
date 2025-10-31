@@ -6,7 +6,7 @@ import { createCamera } from './core/camera.js';
 import { createRenderer } from './core/renderer.js';
 import { createControls } from './core/controls.js';
 import { loadGLTF, loadTexture } from './loaders/assets.js';
-import { createStandardMaterial } from './materials/factories.js';
+import { createStandardMaterial, ensureUv2 } from './materials/factories.js';
 import { attachHoverScale, attachClickToggle } from './systems/interaction.js';
 import { attachResize } from './systems/resize.js';
 import { startLoop } from './systems/loop.js';
@@ -15,6 +15,7 @@ import { startLoop } from './systems/loop.js';
 import uwagiUrl from '@/3dmodels/uwagi.glb';
 import testObjectUrl from '@/3dmodels/Test_object.glb';
 import baseTexUrl from '@/images/texture/Test_texture.png';
+import aoTexUrl from '@/images/texture/Test_texture.png';
 
 export async function initThreeApp(container = document.getElementById('canvas')) {
   if (!container) throw new Error('Container element #canvas not found');
@@ -32,11 +33,17 @@ export async function initThreeApp(container = document.getElementById('canvas')
   scene.add(directionalLight);
 
   // Load assets
-  const [uwagiGltf, testGltf, baseTex] = await Promise.all([
+  const [uwagiGltf, testGltf, baseTex, aoTex] = await Promise.all([
     loadGLTF(uwagiUrl),
     loadGLTF(testObjectUrl),
     loadTexture(baseTexUrl, {
       colorSpace: THREE.SRGBColorSpace,
+      flipY: false,
+      minFilter: THREE.LinearMipmapLinearFilter,
+      magFilter: THREE.LinearFilter,
+    }),
+    loadTexture(aoTexUrl, {
+      // AO is non-color data; keep Linear
       flipY: false,
       minFilter: THREE.LinearMipmapLinearFilter,
       magFilter: THREE.LinearFilter,
@@ -45,11 +52,21 @@ export async function initThreeApp(container = document.getElementById('canvas')
 
   // uwagi model
   const uwagiModel = uwagiGltf.scene;
-  uwagiModel.position.set(0, -1, 0);
+  uwagiModel.position.set(0, 2, 0);
   uwagiModel.scale.set(0.5, 0.5, 0.5);
   uwagiModel.traverse((child) => {
     if (child.isMesh) {
-      child.material.side = THREE.DoubleSide;
+      // Ensure uv2 exists when using aoMap
+      ensureUv2(child.geometry);
+      const mat = createStandardMaterial({
+        baseMap: baseTex,            // 画像のベースカラー
+        aoMap: aoTex,                // AOマップ併用
+        aoMapIntensity: 1.0,
+        roughness: 1,
+        metalness: 0,
+        side: THREE.DoubleSide,
+      });
+      child.material = mat;
     }
   });
   scene.add(uwagiModel);
@@ -60,7 +77,17 @@ export async function initThreeApp(container = document.getElementById('canvas')
   testObject.scale.set(0.5, 0.5, 0.5);
   testObject.traverse((child) => {
     if (child.isMesh) {
-      const mat = createStandardMaterial({ map: baseTex, color: 0xffffff, roughness: 1, metalness: 0, side: THREE.DoubleSide });
+      // Ensure uv2 exists when using aoMap
+      ensureUv2(child.geometry);
+      const mat = createStandardMaterial({
+        //baseMap: baseTex,            // 画像のベースカラー
+        baseColor: 0xffaa00,     // 画像を使わない場合はカラーコードも可
+        aoMap: aoTex,                // AOマップ併用
+        aoMapIntensity: 1.0,
+        roughness: 1,
+        metalness: 0,
+        side: THREE.DoubleSide,
+      });
       child.material = mat;
     }
   });
