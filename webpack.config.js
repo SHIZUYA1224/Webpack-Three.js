@@ -3,6 +3,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 
 
 module.exports = {
@@ -11,6 +13,12 @@ module.exports = {
   output: {
     filename: "javascripts/main.js",
     path: path.resolve(__dirname, "dist")
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   devtool: "source-map",
   devServer: {
@@ -60,21 +68,18 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/,
-        use: [
-          {
-            loader: 'image-webpack-loader',
-            options: {
-              mozjpeg: {
-                progressive: true,
-                quality: 65
-              },
-          },
-        },
-        ],
         type: 'asset/resource',
         generator: {
           filename: 'images/[name][ext]'
-        }
+        },
+        use: isProd
+          ? [{
+              loader: 'image-webpack-loader',
+              options: {
+                mozjpeg: { progressive: true, quality: 65 }
+              }
+            }]
+          : []
       },
       {
           test: /\.pug/,
@@ -89,20 +94,14 @@ module.exports = {
       },
       {
         test: /\.(glsl|vs|fs)$/,
-        use: 'raw-loader',
+        type: 'asset/source',
       },
       {
         test: /\.(glb|gltf)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: '3dmodels/',
-              publicPath: '3dmodels/',
-            },
-          },
-        ],
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/models/[name][ext]'
+        }
       },
     ],
   },
@@ -122,6 +121,5 @@ module.exports = {
   new CleanWebpackPlugin(),
 ],
 };
-
 
 

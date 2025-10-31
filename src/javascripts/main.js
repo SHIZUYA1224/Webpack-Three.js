@@ -1,6 +1,6 @@
 import './reactApp.jsx';
 import '../stylesheets/main.scss';
-import './three/threeScene.js';  // パスを調整
+import './three/app.js';
 
 // ヘッダーの表示/非表示
 let lastScrollTop = 0;

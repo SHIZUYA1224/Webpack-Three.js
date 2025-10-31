@@ -1,41 +1,35 @@
 import * as THREE from 'three';
 import { materialConfig } from './config.js';
+import aoUrl from '../../images/texture/Test_texture.png';
+
+const textureLoader = new THREE.TextureLoader();
+// Use Webpack-managed asset URL instead of a hard-coded public path
+export const aoTexture = textureLoader.load(
+  aoUrl,
+  undefined,
+  undefined,
+  (err) => console.error('Failed to load AO texture:', err)
+);
+
+// テクスチャ設定を追加（繰り返しやフィルタリングを調整）
+aoTexture.wrapS = THREE.RepeatWrapping;
+aoTexture.wrapT = THREE.RepeatWrapping;
+aoTexture.minFilter = THREE.LinearMipmapLinearFilter;
+aoTexture.magFilter = THREE.LinearFilter;
+// glTF メッシュに外部テクスチャを貼る場合の推奨設定
+// 色テクスチャとして使う時は sRGB、Y軸反転は無効化
+aoTexture.flipY = false;
+aoTexture.colorSpace = THREE.SRGBColorSpace;
 
 // Redマテリアル
-export const redMaterial = new THREE.MeshBasicMaterial(materialConfig.red);
+export const redMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, aoMap: aoTexture });
+redMaterial.aoMapIntensity = 1; // aoMap の強度を設定
+redMaterial.needsUpdate = true; // マテリアルを更新
 
 // Blueマテリアル
-export const blueMaterial = new THREE.MeshBasicMaterial(materialConfig.blue);
+export const blueMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, aoMap: aoTexture });
+blueMaterial.aoMapIntensity = 1; // aoMap の強度を設定
+blueMaterial.needsUpdate = true; // マテリアルを更新
 
 // デフォルトのGreenマテリアル
 export const greenMaterial = new THREE.MeshBasicMaterial(materialConfig.green);
-
-// ===== Blenderテクスチャマップの適用例（コメントアウト） =====
-// Blenderで出力したテクスチャマップをMeshStandardMaterialに適用する場合:
-// const textureLoader = new THREE.TextureLoader();
-
-// // テクスチャのロード（portfolio-webpack/src/images/texture/ に配置予定）
-// const baseColorTexture = textureLoader.load('images/texture/base_color.jpg');  // Base Color (Diffuse)
-// const normalTexture = textureLoader.load('images/texture/normal.jpg');          // Normal
-// const roughnessTexture = textureLoader.load('images/texture/roughness.jpg');    // Roughness
-// const metallicTexture = textureLoader.load('images/texture/metallic.jpg');      // Metallic
-// const aoTexture = textureLoader.load('images/texture/ao.jpg');                  // Ambient Occlusion
-// const emissiveTexture = textureLoader.load('images/texture/emissive.jpg');      // Emission
-// const alphaTexture = textureLoader.load('images/texture/alpha.jpg');            // Alpha (Transparency)
-
-// // MeshStandardMaterialに適用
-// export const texturedMaterial = new THREE.MeshStandardMaterial({
-//   map: baseColorTexture,           // ベースカラー
-//   normalMap: normalTexture,        // 法線マップ
-//   roughnessMap: roughnessTexture,  // 粗さマップ
-//   metalnessMap: metallicTexture,   // 金属マップ
-//   aoMap: aoTexture,                // AOマップ
-//   emissiveMap: emissiveTexture,    // 発光マップ
-//   alphaMap: alphaTexture,          // 透明マップ
-//   transparent: true,               // 透明マップ使用時はtrue
-// });
-
-// // 追加設定（必要に応じて）
-// texturedMaterial.normalMap.encoding = THREE.LinearEncoding;  // 法線マップのエンコーディング
-// texturedMaterial.aoMapIntensity = 1.0;  // AO強度
-// texturedMaterial.emissiveIntensity = 1.0;  // 発光強度

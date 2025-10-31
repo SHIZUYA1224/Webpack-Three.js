@@ -4,6 +4,10 @@
     "module": "es6",
     "target": "es5",
     "jsx": "react",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    }
   }
 }
