@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 
 const manager = new THREE.LoadingManager();
 export function onLoading(onProgress, onError) {
@@ -36,3 +37,25 @@ export function loadGLTF(url) {
   });
 }
 
+export function loadVRM(url) {
+  const loader = new GLTFLoader(manager);
+  loader.register((parser) => new VRMLoaderPlugin(parser));
+  return new Promise((resolve, reject) => {
+    loader.load(
+      url,
+      (gltf) => {
+        const vrm = gltf.userData.vrm;
+        if (vrm) {
+          // Optional cleanup/optimization
+          try {
+            VRMUtils.removeUnnecessaryVertices(vrm.scene);
+            VRMUtils.combineSkeletons(vrm.scene);  // removeUnnecessaryJoints を combineSkeletons に置き換え
+          } catch (_) {}
+        }
+        resolve(vrm ?? gltf);
+      },
+      undefined,
+      (err) => reject(err)
+    );
+  });
+}

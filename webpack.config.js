@@ -97,7 +97,7 @@ module.exports = {
         type: 'asset/source',
       },
       {
-        test: /\.(glb|gltf)$/i,
+        test: /\.(glb|gltf|vrm)$/i,
         type: 'asset/resource',
         generator: {
           filename: 'assets/models/[name][ext]'

@@ -5,7 +5,7 @@ import { createScene } from './core/scene.js';
 import { createCamera } from './core/camera.js';
 import { createRenderer } from './core/renderer.js';
 import { createControls } from './core/controls.js';
-import { loadGLTF, loadTexture } from './loaders/assets.js';
+import { loadGLTF, loadTexture, loadVRM } from './loaders/assets.js';
 import { createStandardMaterial, ensureUv2 } from './materials/factories.js';
 import { attachHoverScale, attachClickToggle } from './systems/interaction.js';
 import { attachResize } from './systems/resize.js';
@@ -16,6 +16,7 @@ import uwagiUrl from '@/3dmodels/uwagi.glb';
 import testObjectUrl from '@/3dmodels/Test_object.glb';
 import baseTexUrl from '@/images/texture/Test_texture.png';
 import aoTexUrl from '@/images/texture/Test_texture.png';
+import vrmModelUrl from '@/3dmodels/VRM.vrm';
 
 export async function initThreeApp(container = document.getElementById('canvas')) {
   if (!container) throw new Error('Container element #canvas not found');
@@ -33,7 +34,13 @@ export async function initThreeApp(container = document.getElementById('canvas')
   scene.add(directionalLight);
 
   // Load assets
-  const [uwagiGltf, testGltf, baseTex, aoTex] = await Promise.all([
+  const [
+    uwagiGltf,
+    testGltf,
+    baseTex,
+    aoTex,
+    vrm,
+  ] = await Promise.all([
     loadGLTF(uwagiUrl),
     loadGLTF(testObjectUrl),
     loadTexture(baseTexUrl, {
@@ -47,8 +54,18 @@ export async function initThreeApp(container = document.getElementById('canvas')
       flipY: false,
       minFilter: THREE.LinearMipmapLinearFilter,
       magFilter: THREE.LinearFilter,
-    })
+    }),
+    loadVRM(vrmModelUrl),
   ]);
+
+  // VRM model (add as-is; VRM plugin sets proper materials)
+  let vrmModel = null;
+  if (vrm && vrm.scene) {
+    vrmModel = vrm;
+    vrmModel.scene.position.set(2, 0, 0);
+    vrmModel.scene.rotation.y = Math.PI; // face camera
+    scene.add(vrmModel.scene);
+  }
 
   // uwagi model
   const uwagiModel = uwagiGltf.scene;
@@ -126,7 +143,12 @@ export async function initThreeApp(container = document.getElementById('canvas')
 
   // Resize + Loop
   const detachResize = attachResize(camera, renderer);
-  const stopLoop = startLoop({ renderer, scene, camera, update: () => controls.update() });
+  const clock = new THREE.Clock();
+  const stopLoop = startLoop({ renderer, scene, camera, update: () => {
+    const delta = clock.getDelta();
+    controls.update();
+    if (vrmModel && vrmModel.update) vrmModel.update(delta);
+  }});
 
   // Return disposer for cleanup
   return function dispose() {
