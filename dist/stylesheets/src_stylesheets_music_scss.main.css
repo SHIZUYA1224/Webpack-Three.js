@@ -1,0 +1,96 @@
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/stylesheets/music.scss ***!
+  \*****************************************************************************************************************************************************************************/
+body.music-page {
+  background-color: red;
+}
+body.music-page h1.music-title {
+  color: pink;
+}
+body.music-page .player {
+  background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+  display: flex;
+  border-radius: 16px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: min(90%, 1200px);
+  height: 400px;
+  margin: 0 auto 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+}
+body.music-page .player .controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+body.music-page .player .controls button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+body.music-page .player .controls button:hover {
+  background-color: #0056b3;
+}
+body.music-page .player .controls button input {
+  width: 100%;
+}
+body.music-page .player img {
+  width: 400px;
+  height: 400px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+body.music-page .player .text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+body.music-page .player .text-container h2 {
+  color: #333;
+  margin: 0;
+  font-size: 2rem;
+}
+body.music-page .player .text-container h3 {
+  color: #666;
+  margin: 0;
+  font-size: 1.5rem;
+}
+body.music-page .player .text-container p {
+  color: #888;
+  margin: 0;
+}
+body.music-page .cards {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+body.music-page .cards .card {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 350px;
+}
+body.music-page .cards .card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+body.music-page .cards .card h2 {
+  color: black;
+}
+body.music-page .cards .card p {
+  color: black;
+}

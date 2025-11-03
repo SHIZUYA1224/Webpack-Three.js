@@ -12,7 +12,9 @@ header {
   -webkit-backdrop-filter: blur(10px);  // Safari対応
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  // 影で立体感
   padding: 1rem;
-  transition: transform 0.3s ease; // 追加: アニメーション
+  transition: transform 0.3s ease; // アニメーション
+  transform: translateY(0); // 初期状態
+  will-change: transform; // パフォーマンスヒント
 
   a {
     text-decoration: none;
@@ -45,4 +47,9 @@ header {
       }
     }
   }
+}
+
+// JSのクラス切替で表示/非表示
+header.is-hidden {
+  transform: translateY(-100%);
 }

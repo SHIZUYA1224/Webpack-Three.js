@@ -103,6 +103,11 @@ module.exports = {
           filename: 'assets/models/[name][ext]'
         }
       },
+      {
+        test: /\.(mp3|wav|ogg)$/i,
+        type: 'asset/resource',
+        generator: { filename: 'assets/audio/[name][ext]' }
+      }
     ],
   },
   plugins: [
@@ -118,8 +123,11 @@ module.exports = {
     template: './src/templates/another-page.pug',
     filename: 'another-page.html',
   }),
+  new HtmlWebpackPlugin({
+    template: './src/templates/music.pug',
+    filename: 'music.html',
+  }),
   new CleanWebpackPlugin(),
 ],
 };
-
 

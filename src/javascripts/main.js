@@ -1,19 +1,16 @@
 import './reactApp.jsx';
 import '../stylesheets/main.scss';
-import './three/app.js';
+// 音楽ページ専用のJS/CSSは該当ページでのみ読み込む
+if (document.body.classList.contains('music-page')) {
+  import('../stylesheets/music.scss');
+  import('./music/music.js');
+}
+// Three.jsは#canvasがあるページでのみ動的ロード
+if (document.getElementById('canvas')) {
+  import('./three/app.js');
+}
+import { initHeaderHideOnScroll } from './ui/header';
 
-// ヘッダーの表示/非表示
-let lastScrollTop = 0;
-const header = document.querySelector('header');
+// ヘッダーの表示/非表示（モジュール化）
+initHeaderHideOnScroll();
 
-window.addEventListener('scroll', () => {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  if (scrollTop > lastScrollTop) {
-    // 下スクロール: 隠す
-    header.style.transform = 'translateY(-100%)';
-  } else {
-    // 上スクロール: 表示
-    header.style.transform = 'translateY(0)';
-  }
-  lastScrollTop = scrollTop;
-});

@@ -1,5 +1,6 @@
 @use 'sass:color';
 @use './_header.scss';
+@use './music.scss';
 @import url('https://fonts.googleapis.com/css?family=Noto+Serif+JP');
 
 // 変数定義
@@ -21,6 +22,8 @@ body {
   margin: 0;
   padding: 0;
   background-color: $background-color;
+  // ヘッダーの重なりを防ぐための余白（JSで可変）
+  padding-top: var(--header-height, 0px);
 }
 
 .container {

@@ -19,7 +19,7 @@ import aoTexUrl from '@/images/texture/Test_texture.png';
 import vrmModelUrl from '@/3dmodels/VRM.vrm';
 
 export async function initThreeApp(container = document.getElementById('canvas')) {
-  if (!container) throw new Error('Container element #canvas not found');
+  if (!container) return null; // ページに#canvasが無い場合は何もしない
 
   const scene = createScene();
   const camera = createCamera({ position: [0, 0, 5] });
@@ -161,5 +161,7 @@ export async function initThreeApp(container = document.getElementById('canvas')
   };
 }
 
-// Auto-start for current app behaviour
-initThreeApp().catch((e) => console.error(e));
+// Auto-start only when #canvas exists
+if (document.getElementById('canvas')) {
+  initThreeApp().catch((e) => console.error(e));
+}
