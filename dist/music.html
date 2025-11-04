@@ -5,26 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Webpack Pug Template</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Serif+JP" rel="stylesheet">
-  <script defer src="javascripts/main.js"></script><link href="./stylesheets/main.css" rel="stylesheet"></head>
+  <script defer src="javascripts/main.js"></script><script defer src="javascripts/music.js"></script><link href="./stylesheets/main.css" rel="stylesheet"></head>
   <body class="music-page">
 <header><a href="/">
     <h1>Portfolio Title</h1></a>
   <nav>
     <ul>
       <li><a href="/">Home</a></li>
-      <li><a href="/another-page.html">Another Page</a></li>
+      <li><a href="/3dmodeling.html">3D</a></li>
       <li><a href="/music.html">Music</a></li>
     </ul>
   </nav>
 </header>
     <h1 class="music-title">Music Page</h1>
     <div class="player"><img src="images/thumbnail.jpg" alt="thumbnail">
-      <div class="text-container">
+      <div class="music-container">
         <h2>Music name </h2>
         <h3>Artist name</h3>
         <p>Here is where the music player will go.</p>
-        <audio id="audio-player" controls preload="metadata"></audio>
-        <div class="controls"> 
+        <audio id="audio-player" controls preload="metadata">
+          <source src="assets/audio/sample.mp3" type="audio/mpeg">
+        </audio>
+        <div class="controls">
           <button id="play-button">Play</button>
           <button id="pause-button">Pause</button>
           <input id="seek-bar" type="range" min="0" max="100" value="0">
@@ -34,89 +36,8 @@
       <!-- 音楽プレーヤーの埋め込みコードやコンポーネントをここに追加-->
     </div>
     <div class="cards">
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
-      </div>
-      <div class="card"><img src="images/thumbnail.jpg" alt="thumbnail">
-        <h2>Card Title</h2>
-        <p>This is a simple card with some text.</p>
+      <div class="card">
+        <!-- ここにカードの内容を追加（JavaScript で生成される）-->
       </div>
     </div>
   </body>

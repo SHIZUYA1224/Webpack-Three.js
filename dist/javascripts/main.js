@@ -30541,7 +30541,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "javascripts/" + chunkId + ".main.js";
+/******/ 			return "javascripts/" + chunkId + ".js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -30726,7 +30726,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 		
 /******/ 		__webpack_require__.f.miniCss = (chunkId, promises) => {
-/******/ 			var cssChunks = {"src_stylesheets_music_scss":1};
+/******/ 			var cssChunks = {"src_stylesheets_music_scss":1,"src_stylesheets_modeling_scss":1};
 /******/ 			if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 			else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 				promises.push(installedCssChunks[chunkId] = loadStylesheet(chunkId).then(() => {
@@ -30853,9 +30853,14 @@ if (document.body.classList.contains('music-page')) {
   __webpack_require__.e(/*! import() */ "src_stylesheets_music_scss").then(__webpack_require__.bind(__webpack_require__, /*! ../stylesheets/music.scss */ "./src/stylesheets/music.scss"));
   __webpack_require__.e(/*! import() */ "src_javascripts_music_music_js").then(__webpack_require__.bind(__webpack_require__, /*! ./music/music.js */ "./src/javascripts/music/music.js"));
 }
+// modelingページ専用のJS/CSSは該当ページでのみ読み込む
+if (document.body.classList.contains('modeling-page')) {
+  __webpack_require__.e(/*! import() */ "src_stylesheets_modeling_scss").then(__webpack_require__.bind(__webpack_require__, /*! ../stylesheets/modeling.scss */ "./src/stylesheets/modeling.scss"));
+  Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_three_build_three_module_js-node_modules_three_examples_jsm_loaders_GLTF-0fe2bf"), __webpack_require__.e("src_javascripts_3dmodeling_3dmodeling_js")]).then(__webpack_require__.bind(__webpack_require__, /*! ./3dmodeling/3dmodeling.js */ "./src/javascripts/3dmodeling/3dmodeling.js"));
+}
 // Three.jsは#canvasがあるページでのみ動的ロード
 if (document.getElementById('canvas')) {
-  Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_dat_gui_build_dat_gui_module_js-node_modules_pixiv_three-vrm_lib_three-v-cca598"), __webpack_require__.e("src_javascripts_three_app_js")]).then(__webpack_require__.bind(__webpack_require__, /*! ./three/app.js */ "./src/javascripts/three/app.js"));
+  Promise.all(/*! import() */[__webpack_require__.e("vendors-node_modules_three_build_three_module_js-node_modules_three_examples_jsm_loaders_GLTF-0fe2bf"), __webpack_require__.e("vendors-node_modules_dat_gui_build_dat_gui_module_js-node_modules_pixiv_three-vrm_lib_three-v-766e32"), __webpack_require__.e("src_javascripts_three_app_js")]).then(__webpack_require__.bind(__webpack_require__, /*! ./three/app.js */ "./src/javascripts/three/app.js"));
 }
 
 

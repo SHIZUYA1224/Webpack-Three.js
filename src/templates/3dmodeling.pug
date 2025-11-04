@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title 3DModeling Page
+  body.modeling-page
+    include _header.pug
+    h1 3DModeling Page
+    .controls
+      button#model1-btn(type="button") Load Model 1
+      button#model2-btn(type="button") Load Model 2
+    // WebGL Canvas
+    canvas#canvas-3d
+    
+  

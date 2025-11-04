@@ -2,7 +2,7 @@
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/stylesheets/music.scss ***!
   \*****************************************************************************************************************************************************************************/
 body.music-page {
-  background-color: red;
+  background-color: white;
 }
 body.music-page h1.music-title {
   color: pink;
@@ -81,16 +81,25 @@ body.music-page .cards .card {
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   width: 350px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
-body.music-page .cards .card img {
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
+body.music-page .cards .card:hover {
+  transform: scale(1.05);
 }
 body.music-page .cards .card h2 {
   color: black;
+  margin: 0 0 0.5rem 0;
 }
 body.music-page .cards .card p {
   color: black;
+  margin: 0;
+}
+body.music-page .cards .card .card-artwork {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  background-color: #ccc;
 }

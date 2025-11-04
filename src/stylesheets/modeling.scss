@@ -1,0 +1,16 @@
+// Modeling ページのスタイル
+
+body.modeling-page {
+  background-color: #f0f0f0;
+  h1 {
+    color: #333;
+  }
+}
+
+.modeling-page {
+  #canvas-3d {
+    width: 600px;
+    height: 400px;
+    border: 1px solid #ccc;  // 境界線を追加（オプション）
+  }
+}

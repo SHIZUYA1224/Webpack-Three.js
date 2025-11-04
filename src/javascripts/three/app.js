@@ -62,8 +62,9 @@ export async function initThreeApp(container = document.getElementById('canvas')
   let vrmModel = null;
   if (vrm && vrm.scene) {
     vrmModel = vrm;
-    vrmModel.scene.position.set(2, 0, 0);
-    vrmModel.scene.rotation.y = Math.PI; // face camera
+    vrmModel.scene.scale.set(2, 2, 2);
+    vrmModel.scene.position.set(12, 0.2, 20);
+    vrmModel.scene.rotation.y = Math.PI + Math.PI; // face camera
     scene.add(vrmModel.scene);
   }
 

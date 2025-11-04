@@ -8,7 +8,7 @@ $shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 $card-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
 body.music-page {
-  background-color: red;
+  background-color: white;
 
   h1.music-title {
     color: $music-txt-color;
@@ -94,21 +94,31 @@ body.music-page {
       padding: 1rem;
       border-radius: 8px;
       box-shadow: $card-shadow;
-      width: 350px;  // width を増やしてバランス
+      width: 350px;
+      cursor: pointer;  // クリック可能にする
+      transition: transform 0.2s;  // ホバー効果
 
-      img {
-        width: 100%;
-        height: auto;
-        border-radius: 4px;
-        margin-bottom: 0.5rem;
+      &:hover {
+        transform: scale(1.05);  // ホバーで拡大
       }
 
       h2 {
         color: black;
+        margin: 0 0 0.5rem 0;
       }
 
       p {
         color: black;
+        margin: 0;
+      }
+
+      .card-artwork {
+        width: 100%;
+        aspect-ratio: 1;  // 正方形にする
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        background-color: #ccc;  // 画像なしの場合のグレー背景
       }
     }
   }

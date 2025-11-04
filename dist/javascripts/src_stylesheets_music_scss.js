@@ -14,4 +14,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
-//# sourceMappingURL=src_stylesheets_music_scss.main.js.map
+//# sourceMappingURL=src_stylesheets_music_scss.js.map

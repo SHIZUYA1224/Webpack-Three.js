@@ -9,9 +9,13 @@ const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
   mode: "development",
-  entry: "./src/javascripts/main.js",
+  entry: {
+    main: './src/javascripts/main.js',
+    music: './src/javascripts/music/music.js',
+    '3dmodeling': './src/javascripts/3dmodeling/3dmodeling.js',  // 追加
+  },
   output: {
-    filename: "javascripts/main.js",
+    filename: "javascripts/[name].js",
     path: path.resolve(__dirname, "dist")
   },
   resolve: {
@@ -118,14 +122,17 @@ module.exports = {
   new HtmlWebpackPlugin({
     template: './src/templates/index.pug',
     filename: 'index.html',
+    chunks: ['main']
   }),
   new HtmlWebpackPlugin({
-    template: './src/templates/another-page.pug',
-    filename: 'another-page.html',
+    template: './src/templates/3dmodeling.pug',
+    filename: '3dmodeling.html',
+    chunks: ['main', '3dmodeling']  // 変更
   }),
   new HtmlWebpackPlugin({
     template: './src/templates/music.pug',
     filename: 'music.html',
+    chunks: ['main','music']
   }),
   new CleanWebpackPlugin(),
 ],
