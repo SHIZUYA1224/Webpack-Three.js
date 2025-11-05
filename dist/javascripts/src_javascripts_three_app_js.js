@@ -369,10 +369,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var three__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! three */ "./node_modules/three/build/three.core.js");
 /* harmony import */ var three_examples_jsm_loaders_GLTFLoader_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! three/examples/jsm/loaders/GLTFLoader.js */ "./node_modules/three/examples/jsm/loaders/GLTFLoader.js");
-/* harmony import */ var _pixiv_three_vrm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @pixiv/three-vrm */ "./node_modules/@pixiv/three-vrm/lib/three-vrm.module.js");
 
 
-
+// VRM は任意依存。存在しない場合でもビルドできるように動的 require する。
+let VRMLoaderPlugin = null;
+let VRMUtils = null;
+let __hasVRM = false;
+try {
+  var _mod$VRMLoaderPlugin, _mod$VRMUtils;
+  // eslint-disable-next-line no-eval
+  const req = eval('require');
+  const mod = req('@pixiv/three-vrm');
+  VRMLoaderPlugin = (_mod$VRMLoaderPlugin = mod === null || mod === void 0 ? void 0 : mod.VRMLoaderPlugin) !== null && _mod$VRMLoaderPlugin !== void 0 ? _mod$VRMLoaderPlugin : null;
+  VRMUtils = (_mod$VRMUtils = mod === null || mod === void 0 ? void 0 : mod.VRMUtils) !== null && _mod$VRMUtils !== void 0 ? _mod$VRMUtils : null;
+  __hasVRM = !!VRMLoaderPlugin;
+} catch (_) {
+  __hasVRM = false;
+}
 const manager = new three__WEBPACK_IMPORTED_MODULE_0__.LoadingManager();
 function onLoading(onProgress, onError) {
   if (onProgress) manager.onProgress = onProgress;
@@ -410,18 +423,21 @@ function loadGLTF(url) {
 }
 function loadVRM(url) {
   const loader = new three_examples_jsm_loaders_GLTFLoader_js__WEBPACK_IMPORTED_MODULE_1__.GLTFLoader(manager);
-  loader.register(parser => new _pixiv_three_vrm__WEBPACK_IMPORTED_MODULE_2__.VRMLoaderPlugin(parser));
+  if (__hasVRM && VRMLoaderPlugin) {
+    loader.register(parser => new VRMLoaderPlugin(parser));
+  }
   return new Promise((resolve, reject) => {
     loader.load(url, gltf => {
-      const vrm = gltf.userData.vrm;
-      if (vrm) {
-        // Optional cleanup/optimization
+      var _gltf$userData;
+      const vrm = (_gltf$userData = gltf.userData) === null || _gltf$userData === void 0 ? void 0 : _gltf$userData.vrm;
+      if (vrm && VRMUtils) {
         try {
-          _pixiv_three_vrm__WEBPACK_IMPORTED_MODULE_2__.VRMUtils.removeUnnecessaryVertices(vrm.scene);
-          _pixiv_three_vrm__WEBPACK_IMPORTED_MODULE_2__.VRMUtils.combineSkeletons(vrm.scene); // removeUnnecessaryJoints を combineSkeletons に置き換え
+          var _VRMUtils$removeUnnec, _VRMUtils, _VRMUtils$combineSkel, _VRMUtils2;
+          (_VRMUtils$removeUnnec = (_VRMUtils = VRMUtils).removeUnnecessaryVertices) === null || _VRMUtils$removeUnnec === void 0 || _VRMUtils$removeUnnec.call(_VRMUtils, vrm.scene);
+          (_VRMUtils$combineSkel = (_VRMUtils2 = VRMUtils).combineSkeletons) === null || _VRMUtils$combineSkel === void 0 || _VRMUtils$combineSkel.call(_VRMUtils2, vrm.scene);
         } catch (_) {}
       }
-      resolve(vrm !== null && vrm !== void 0 ? vrm : gltf);
+      resolve(vrm || gltf);
     }, undefined, err => reject(err));
   });
 }

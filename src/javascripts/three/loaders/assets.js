@@ -1,6 +1,19 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+// VRM は任意依存。存在しない場合でもビルドできるように動的 require する。
+let VRMLoaderPlugin = null;
+let VRMUtils = null;
+let __hasVRM = false;
+try {
+  // eslint-disable-next-line no-eval
+  const req = eval('require');
+  const mod = req('@pixiv/three-vrm');
+  VRMLoaderPlugin = mod?.VRMLoaderPlugin ?? null;
+  VRMUtils = mod?.VRMUtils ?? null;
+  __hasVRM = !!VRMLoaderPlugin;
+} catch (_) {
+  __hasVRM = false;
+}
 
 const manager = new THREE.LoadingManager();
 export function onLoading(onProgress, onError) {
@@ -39,20 +52,21 @@ export function loadGLTF(url) {
 
 export function loadVRM(url) {
   const loader = new GLTFLoader(manager);
-  loader.register((parser) => new VRMLoaderPlugin(parser));
+  if (__hasVRM && VRMLoaderPlugin) {
+    loader.register((parser) => new VRMLoaderPlugin(parser));
+  }
   return new Promise((resolve, reject) => {
     loader.load(
       url,
       (gltf) => {
-        const vrm = gltf.userData.vrm;
-        if (vrm) {
-          // Optional cleanup/optimization
+        const vrm = gltf.userData?.vrm;
+        if (vrm && VRMUtils) {
           try {
-            VRMUtils.removeUnnecessaryVertices(vrm.scene);
-            VRMUtils.combineSkeletons(vrm.scene);  // removeUnnecessaryJoints を combineSkeletons に置き換え
+            VRMUtils.removeUnnecessaryVertices?.(vrm.scene);
+            VRMUtils.combineSkeletons?.(vrm.scene);
           } catch (_) {}
         }
-        resolve(vrm ?? gltf);
+        resolve(vrm || gltf);
       },
       undefined,
       (err) => reject(err)

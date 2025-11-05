@@ -1,16 +1,121 @@
 // Modeling ページのスタイル
 
 body.modeling-page {
-  background-color: #f0f0f0;
-  h1 {
-    color: #333;
-  }
-}
+  --gap: 24px;
+  --sidebar-w: 340px;
+  --radius: 10px;
+  --panel: #fff;
+  --text: #222;
+  --muted: #6b7280;
+  --brand: #2563eb;
+  background: #f5f7fb;
 
-.modeling-page {
-  #canvas-3d {
-    width: 600px;
-    height: 400px;
-    border: 1px solid #ccc;  // 境界線を追加（オプション）
+  .page { padding: 24px; }
+
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr var(--sidebar-w);
+    gap: var(--gap);
+  }
+
+  .page-title {
+    margin: 0 0 12px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .viewer-toolbar { margin-bottom: 8px; }
+  .btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #374151;
+  }
+
+  .viewer {
+    background: radial-gradient(ellipse at center, #2b2b2b 0%, #111 70%);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.1);
+    padding: 0;
+
+    #canvas-3d {
+      display: block;
+      width: 100%;
+      height: 450px; // 画像の縦横比に近い高さ
+    }
+  }
+  .description {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 16px;
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.1);
+    h2 { font-size: 16px; margin: 0 0 8px; }
+    p { margin: 0; color: #374151; line-height: 1.7; }
+    .info-list {
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 16px;
+      li { font-size: 13px; color: #374151; }
+      span { color: var(--muted); }
+    }
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    height: max-content;
+
+    .author-card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: var(--gap);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.1);
+
+      .author-header { display: flex; align-items: center; gap: 12px; }
+      .avatar { width: 40px; height: 40px; border-radius: 999px; object-fit: cover; }
+      .author-name { margin: 0; font-size: 14px; }
+      .follow-btn {
+        margin-left: auto;
+        padding: 6px 10px;
+        font-size: 12px;
+        border: none;
+        border-radius: 6px;
+        background: var(--brand);
+        color: #fff;
+        cursor: pointer;
+      }
+    }
+
+    .related {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.1);
+      h3 { margin: 0 0 12px; font-size: 14px; }
+      .item {
+        display: flex;
+        gap: 10px;
+        padding: 8px 0;
+        border-top: 1px solid #f0f2f5;
+        &:first-of-type { border-top: 0; }
+        .thumb { width: 96px; height: 54px; object-fit: cover; border-radius: 6px; }
+        .text {
+          flex: 1;
+          .title { margin: 0 0 4px; font-size: 13px; color: #111827; }
+          .meta { margin: 0; font-size: 12px; color: var(--muted); }
+        }
+      }
+      .item.active { background: #f8fafc; }
+    }
   }
 }

@@ -11,8 +11,6 @@ module.exports = {
   mode: "development",
   entry: {
     main: './src/javascripts/main.js',
-    music: './src/javascripts/music/music.js',
-    '3dmodeling': './src/javascripts/3dmodeling/3dmodeling.js',  // 追加
   },
   output: {
     filename: "javascripts/[name].js",
@@ -127,14 +125,18 @@ module.exports = {
   new HtmlWebpackPlugin({
     template: './src/templates/3dmodeling.pug',
     filename: '3dmodeling.html',
-    chunks: ['main', '3dmodeling']  // 変更
+    chunks: ['main']
+  }),
+  new HtmlWebpackPlugin({
+    template: './src/templates/3dmodeling.pug',
+    filename: 'model.html',
+    chunks: ['main']
   }),
   new HtmlWebpackPlugin({
     template: './src/templates/music.pug',
     filename: 'music.html',
-    chunks: ['main','music']
+    chunks: ['main']
   }),
   new CleanWebpackPlugin(),
 ],
 };
-

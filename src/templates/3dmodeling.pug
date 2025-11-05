@@ -1,16 +1,46 @@
 doctype html
-html(lang="en")
+html(lang="ja")
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title 3DModeling Page
+    title モデル表示 - ポートフォリオ
   body.modeling-page
     include _header.pug
-    h1 3DModeling Page
-    .controls
-      button#model1-btn(type="button") Load Model 1
-      button#model2-btn(type="button") Load Model 2
-    // WebGL Canvas
-    canvas#canvas-3d
-    
-  
+    .page
+      .main-content
+        .model-section
+          h1.page-title 【モデル】サンプルモデル
+          .viewer-toolbar
+            button.btn-small(type="button") モデル表示
+          .viewer
+            // メインの3Dキャンバス（YouTube風の黒背景）
+            canvas#canvas-3d
+          .meta-row
+            span.stat ポリゴン数:
+              span#stat-polys -
+            span.stat 頂点数:
+              span#stat-verts -
+            span.stat メッシュ数:
+              span#stat-meshes -
+            span.stat マテリアル数:
+              span#stat-mats -
+          .description
+            h2 説明 / 情報
+            p これは Three.js を用いたサンプルモデルの表示ページです。左の「モデル表示」ボタンからモデルを切り替えられます。
+            ul.info-list
+              li 公開日:
+                span#info-date -
+              li 制作ソフト:
+                span#info-software -
+              li ライセンス:
+                span#info-license -
+        .sidebar
+          .author-card
+            .author-header
+              img.avatar(src=require('../images/icon.png') alt='author')
+              .author-info
+                h3.author-name 作者名
+                button.follow-btn(type='button') フォロー
+          .related
+            h3 関連モデル
+            .list#related-list
